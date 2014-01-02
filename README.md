@@ -10,5 +10,7 @@ MIT licensed.
 
 # Installation
 Add
+
     pod 'DANAdditions', :podspec => 'https://raw.github.com/endocrimes/DANAdditions/v0.0.1/DANAdditions.podspec'
+
 To your podfile.
