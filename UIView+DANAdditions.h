@@ -8,6 +8,7 @@
 
 @interface UIView (DANAdditions)
 
+@property (nonatomic, assign) CGSize size;
 @property (nonatomic, assign) CGPoint origin;
 @property (nonatomic, assign) CGFloat top;
 @property (nonatomic, assign) CGFloat left;
