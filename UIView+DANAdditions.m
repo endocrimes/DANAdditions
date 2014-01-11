@@ -187,4 +187,16 @@
     }
 }
 
+- (UIImage *)renderAsImage
+{
+    UIGraphicsBeginImageContextWithOptions(self.bounds.size, view.opaque, 0.0);
+    [view.layer renderInContext:UIGraphicsGetCurrentContext()];
+
+    UIImage * image = UIGraphicsGetImageFromCurrentImageContext();
+
+    UIGraphicsEndImageContext();
+
+    return image;
+}
+
 @end
