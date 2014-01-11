@@ -189,8 +189,8 @@
 
 - (UIImage *)renderAsImage
 {
-    UIGraphicsBeginImageContextWithOptions(self.bounds.size, view.opaque, 0.0);
-    [view.layer renderInContext:UIGraphicsGetCurrentContext()];
+    UIGraphicsBeginImageContextWithOptions(self.bounds.size, self.opaque, 0.0);
+    [self.layer renderInContext:UIGraphicsGetCurrentContext()];
 
     UIImage * image = UIGraphicsGetImageFromCurrentImageContext();
 
