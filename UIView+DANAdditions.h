@@ -25,5 +25,6 @@
 
 - (void)crossfadeWithDuration:(NSTimeInterval)duration;
 - (void)crossfadeWithDuration:(NSTimeInterval)duration completion:(void (^)(void))completion;
+- (UIImage *)renderAsImage;
 
 @end
