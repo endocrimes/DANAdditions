@@ -8,7 +8,7 @@
 
 @interface NSString (DANAdditions)
 
-- (NSURL *) url;
+- (NSURL *)url;
 
 + (NSString *)localCachePath;
 + (NSString *)localDocsPath;
