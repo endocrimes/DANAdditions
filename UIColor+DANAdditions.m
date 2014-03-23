@@ -8,7 +8,7 @@
 
 @implementation UIColor (DANAdditions)
 
-+(UIColor *) colorFromHexString:(NSString *)hexString 
++(UIColor *)colorFromHexString:(NSString *)hexString 
 {
     unsigned rgbValue = 0;
     hexString = [hexString stringByReplacingOccurrencesOfString:@"#" withString:@""];
@@ -19,9 +19,9 @@
     return [UIColor colorWithRed:((rgbValue & 0xFF0000) >> 16)/255.0 green:((rgbValue & 0xFF00) >> 8)/255.0 blue:(rgbValue & 0xFF)/255.0 alpha:1.0];
 }
 
-- (UIColor *) lighten:(float)amount
+- (UIColor *)lighten:(CGFloat)amount
 {
-    float h, s, b, a;
+    CGFloat h, s, b, a;
     if ([self getHue:&h saturation:&s brightness:&b alpha:&a])
         return [UIColor colorWithHue:h
                           saturation:s
@@ -30,9 +30,9 @@
     return nil;
 }
 
-- (UIColor *) darken:(float)amount
+- (UIColor *)darken:(CGFloat)amount
 {
-    float h, s, b, a;
+    CGFloat h, s, b, a;
     if ([self getHue:&h saturation:&s brightness:&b alpha:&a])
         return [UIColor colorWithHue:h
                           saturation:s
@@ -41,9 +41,9 @@
     return nil;
 }
 
-- (UIColor *) saturate:(float)amount 
+- (UIColor *)saturate:(CGFloat)amount 
 {
-    float h, s, b, a;
+    CGFloat h, s, b, a;
     if ([self getHue:&h saturation:&s brightness:&b alpha:&a])
         return [UIColor colorWithHue:h
                           saturation:(s + (s * (amount / 100)))
@@ -52,9 +52,9 @@
     return nil;
 }
 
-- (UIColor *) desaturate:(float)amount 
+- (UIColor *)desaturate:(CGFloat)amount 
 {
-    float h, s, b, a;
+    CGFloat h, s, b, a;
     if ([self getHue:&h saturation:&s brightness:&b alpha:&a])
         return [UIColor colorWithHue:h
                           saturation:(s - (s * (amount / 100)))
@@ -63,9 +63,9 @@
     return nil;
 }
 
-- (UIColor *) invert 
+- (UIColor *)invert 
 {
-    float r, g, b, a;
+    CGFloat r, g, b, a;
     if ([self getRed:&r green:&g blue:&b alpha:&a])
         return [UIColor colorWithRed:1.0-r
                                green:1.0-g
@@ -74,9 +74,9 @@
     return nil;
 }
 
-- (UIColor *) greyscale 
+- (UIColor *)greyscale 
 {
-    float r, g, b, a;
+    CGFloat r, g, b, a;
     if ([self getRed:&r green:&g blue:&b alpha:&a])
         return [UIColor colorWithWhite:((r + g + b)/3)
                                  alpha:a];
