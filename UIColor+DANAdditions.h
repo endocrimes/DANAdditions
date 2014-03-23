@@ -8,15 +8,15 @@
 
 @interface UIColor (DANAdditions)
 
-+ (UIColor *) colorFromHexString:(NSString *)hexString;
++ (UIColor *)colorFromHexString:(NSString *)hexString;
 
-- (UIColor *) lighten:(float)amount;
-- (UIColor *) darken:(float)amount;
+- (UIColor *)lighten:(CGFloat)amount;
+- (UIColor *)darken:(CGFloat)amount;
 
-- (UIColor *) saturate:(float)amount;
-- (UIColor *) desaturate:(float)amount;
+- (UIColor *)saturate:(CGFloat)amount;
+- (UIColor *)desaturate:(CGFloat)amount;
 
-- (UIColor *) invert;
-- (UIColor *) greyscale;
+- (UIColor *)invert;
+- (UIColor *)greyscale;
 
 @end
