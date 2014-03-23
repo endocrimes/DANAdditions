@@ -8,7 +8,7 @@
 
 @implementation UINavigationController (DANAdditions)
 
-- (void) setNavigationBarColor:(UIColor *)color
+- (void)setNavigationBarColor:(UIColor *)color
 {
     self.navigationBar.barTintColor = color;
 }
