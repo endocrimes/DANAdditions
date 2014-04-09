@@ -78,9 +78,45 @@
 {
     CGFloat r, g, b, a;
     if ([self getRed:&r green:&g blue:&b alpha:&a])
-        return [UIColor colorWithWhite:((r + g + b)/3)
+        return [UIColor colorWithWhite:((r + g + b) / 3)
                                  alpha:a];
     return nil;
+}
+
+- (UIColor*)colorBlendedOnColor:(UIColor*)blendColor
+{
+    UIColor *blendedColor = [self copy];
+    
+    UIGraphicsBeginImageContextWithOptions(CGSizeMake(1, 1), NO, 1);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    [[UIColor whiteColor] setFill];
+    CGContextFillRect(context, CGRectMake(0, 0, 1, 1));
+    [blendColor setFill];
+    CGContextFillRect(context, CGRectMake(0, 0, 1, 1));
+    
+    unsigned char* data = CGBitmapContextGetData (context);
+    
+    if(data != NULL)
+    {
+        int alpha = data[3];
+        int red   = data[2];
+        int green = data[1];
+        int blue  = data[0];
+                
+        blendedColor = [UIColor colorWithRed:(red   / 255.0f)
+                                       green:(green / 255.0f)
+                                        blue:(blue  / 255.0f)
+                                       alpha:(alpha / 255.0f)];
+    }
+    
+    UIGraphicsEndImageContext();
+    
+    return blendedColor;
+}
+ 
+- (UIColor*)colorWithMockAlphaOnWhite:(CGFloat)mockAlpha
+{
+    return [self colorBlendedOnColor:[self colorWithAlphaComponent:mockAlpha]];
 }
 
 @end
