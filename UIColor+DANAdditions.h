@@ -19,4 +19,7 @@
 - (UIColor *)invert;
 - (UIColor *)greyscale;
 
+- (UIColor*)colorWithMockAlphaOnWhite:(CGFloat)mockAlpha;
+- (UIColor*)colorBlendedOnColor:(UIColor*)blendColor;
+
 @end
