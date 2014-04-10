@@ -11,6 +11,8 @@ MIT licensed.
 # Installation
 Add
 
-    pod 'DANAdditions', :podspec => 'https://raw.github.com/DanielTomlinson/DANAdditions/v0.0.1/DANAdditions.podspec'
+    pod 'DANAdditions', :git => 'https://github.com/DanielTomlinson/DANAdditions.git'
 
-To your podfile.
+To your podfile. Then run:
+
+    pod install
