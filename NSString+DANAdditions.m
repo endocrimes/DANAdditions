@@ -48,7 +48,10 @@ static const short _base64DecodingTable[256] = {
 
 - (NSString *)urlFriendlyFileNameWithExtension:(NSString *)extension prefixID:(int)prefixID
 {
-    if (self.length == 0) return @"";
+    if (self.length == 0)
+    {
+        return @"";
+    }
     
     NSString *umlaut = [self stringByReplacingOccurrencesOfString:@"ß" withString:@"ss"];
     umlaut = [umlaut stringByReplacingOccurrencesOfString:@"ä" withString:@"ae"];
@@ -81,6 +84,7 @@ static const short _base64DecodingTable[256] = {
 - (NSString *)urlFriendlyFileName
 {
     NSString *fileExtension = [self pathExtension];
+    
     return [[self stringByReplacingOccurrencesOfString:fileExtension withString:@""] urlFriendlyFileNameWithExtension:fileExtension prefixID:0];
 }
 
@@ -88,6 +92,7 @@ static const short _base64DecodingTable[256] = {
 {
     NSString *protocol = ([self hasPrefix:@"https://"]) ? @"https://" : @"http://";
     NSString *cleanedStr = [self stringByReplacingOccurrencesOfString:protocol withString:@""];
+    
     return [NSString stringWithFormat:@"%@%@",protocol, [cleanedStr stringByAppendingPathComponent:pathComponent]];
 }
 
@@ -95,6 +100,7 @@ static const short _base64DecodingTable[256] = {
 {
     NSString *protocol = ([self hasPrefix:@"https://"]) ? @"https://" : @"http://";
     NSString *cleanedStr = [self stringByReplacingOccurrencesOfString:protocol withString:@""];
+    
     return [NSString stringWithFormat:@"%@%@",protocol, [cleanedStr stringByDeletingLastPathComponent]];
 }
 
@@ -109,6 +115,7 @@ static const short _base64DecodingTable[256] = {
     {
         [output appendFormat:@"%02x", digest[i]];
     }
+    
     return output;
 }
 
@@ -121,14 +128,18 @@ static const short _base64DecodingTable[256] = {
     
     // Get the Raw Data length and ensure we actually have data
     int intLength = (int)[objData length];
-    if (intLength == 0) return nil;
+    if (intLength == 0) 
+    {
+        return nil;
+    }
     
     // Setup the String-based Result placeholder and pointer within that placeholder
     strResult = (char *)calloc((((intLength + 2) / 3) * 4) + 1, sizeof(char));
     objPointer = strResult;
     
     // Iterate through everything
-    while (intLength > 2) { // keep going until we have less than 24 bits
+    while (intLength > 2) 
+    { // keep going until we have less than 24 bits
         *objPointer++ = _base64EncodingTable[objRawData[0] >> 2];
         *objPointer++ = _base64EncodingTable[((objRawData[0] & 0x03) << 4) + (objRawData[1] >> 4)];
         *objPointer++ = _base64EncodingTable[((objRawData[1] & 0x0f) << 2) + (objRawData[2] >> 6)];
@@ -140,7 +151,8 @@ static const short _base64DecodingTable[256] = {
     }
     
     // now deal with the tail end of things
-    if (intLength != 0) {
+    if (intLength != 0) 
+    {
         *objPointer++ = _base64EncodingTable[objRawData[0] >> 2];
         if (intLength > 1) 
         {
@@ -178,7 +190,8 @@ static const short _base64DecodingTable[256] = {
     unsigned char *objResult = calloc(intLength, sizeof(unsigned char));
     
     // Run through the whole string, converting as we go
-    while ( ((intCurrent = *objPointer++) != '\0') && (intLength-- > 0) ) {
+    while ( ((intCurrent = *objPointer++) != '\0') && (intLength-- > 0) )
+    {
         if (intCurrent == '=') 
         {
             if (*objPointer != '=' && ((i % 4) == 1))
@@ -203,7 +216,8 @@ static const short _base64DecodingTable[256] = {
             return nil;
         }
         
-        switch (i % 4) {
+        switch (i % 4) 
+        {
             case 0:
                 objResult[j] = intCurrent << 2;
                 break;
@@ -227,7 +241,8 @@ static const short _base64DecodingTable[256] = {
     k = j;
     if (intCurrent == '=') 
     {
-        switch (i % 4) {
+        switch (i % 4) 
+        {
             case 1:
                 // Invalid state
                 free(objResult);
@@ -244,22 +259,26 @@ static const short _base64DecodingTable[256] = {
     // Cleanup and setup the return NSData
     NSData * objData = [[NSData alloc] initWithBytes:objResult length:j];
     free(objResult);
+    
     return [[NSString alloc] initWithData:objData encoding:NSUTF8StringEncoding];
 }
 
 - (NSString*)stringBetweenString:(NSString *)start andString:(NSString *)end 
 {
     NSRange startRange = [self rangeOfString:start];
-    if (startRange.location != NSNotFound) {
+    if (startRange.location != NSNotFound) 
+    {
         NSRange targetRange;
         targetRange.location = startRange.location + startRange.length;
         targetRange.length = [self length] - targetRange.location;
         NSRange endRange = [self rangeOfString:end options:0 range:targetRange];
-        if (endRange.location != NSNotFound) {
+        if (endRange.location != NSNotFound)
+        {
             targetRange.length = endRange.location - targetRange.location;
             return [self substringWithRange:targetRange];
         }
     }
+    
     return nil;
 }
 
@@ -268,7 +287,10 @@ static const short _base64DecodingTable[256] = {
     NSRange r;
     NSString *s = [self copy];
     while ((r = [s rangeOfString:@"<[^>]+>" options:NSRegularExpressionSearch]).location != NSNotFound)
+    {
         s = [s stringByReplacingCharactersInRange:r withString:@""];
+    }
+    
     return s;
 }
 
@@ -281,25 +303,35 @@ static const short _base64DecodingTable[256] = {
 {
     NSScanner* scan = [NSScanner scannerWithString:self];
     int val;
+    
     return [scan scanInt:&val] && [scan isAtEnd];
 }
 
 - (BOOL)containsString:(NSString *)needle 
 {
     if (!self.length) return NO;
+    
     return ([self rangeOfString:needle].location == NSNotFound) ? NO : YES;
 }
 
 __attribute__((overloadable))
-NSString *substr(NSString *str, int start) {
+NSString *substr(NSString *str, int start) 
+{
     return substr(str, start, 0);
 }
 
 __attribute__((overloadable))
-NSString *substr(NSString *str, int start, int length) {
+NSString *substr(NSString *str, int start, int length) 
+{
     NSInteger str_len = str.length;
-    if (!str_len) return @"";
-    if (str_len < length) return str;
+    if (!str_len) 
+    {
+        return @"";
+    }
+    if (str_len < length) 
+    {
+        return str;
+    }
     if (start < 0 && length == 0)
     {
         return [str substringFromIndex:str_len+start];
@@ -332,7 +364,11 @@ NSString *substr(NSString *str, int start, int length) {
             tmp_str = [str substringFromIndex:start];
         }
         NSInteger tmp_str_len = tmp_str.length;
-        if (tmp_str_len + length <= 0) return @"";
+        if (tmp_str_len + length <= 0) 
+        {
+            return @"";
+        }
+        
         return [tmp_str substringToIndex:tmp_str_len+length];
     }
     
