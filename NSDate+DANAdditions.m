@@ -163,7 +163,7 @@
 //	return [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
 }
 
-- (NSDateComponents *) dateComponents {
+- (NSDateComponents *)dateComponents {
 	NSDateComponents *components = [[NSDate calendar] components:(NSSecondCalendarUnit|
 																  NSMinuteCalendarUnit|
 																  NSHourCalendarUnit  |
