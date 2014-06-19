@@ -154,6 +154,85 @@
     return [self compare:otherDate] == NSOrderedDescending;
 }
 
+#pragma mark - ISO8601 Support
+/**
+ *  | Supported Formats |
+ * - 2014-06-19T12:03:00Z
+ * - 2014-06-19T12:03:00.000Z
+ * - 2014-06-19T12:03:00+01:00
+ * - 2014-06-19T12:03:00.000+01:00
+ * 
+ * If the timezone is omitted or Z is used then
+ * a +00:00 timezone will be used.
+ *
+ */
++ (NSDate *)dateFromISO8601String:(NSString *)iso8601String {
+    
+    // Early return if nil
+    if (!iso8601String) {
+        return nil;
+    }
+    
+    const char *inputStr = [iso8601String cStringUsingEncoding:NSUTF8StringEncoding];
+    size_t length = strlen(inputStr);
+    
+    // Return nil if the string is shorter than the timestamp length
+    if (length < kISO8601TimestampLength) {
+        return nil;
+    }
+    
+    char parsedStr[kISO8601MaxLength] = "";
+    BOOL hasTimezone = NO;
+    
+    switch (length) {
+        case 20: // '2014-06-19T12:03:00Z'
+        case 24: // '2014-06-19T12:03:00.000Z'
+            strncpy(parsedStr, inputStr, kISO8601TimestampLength);
+            break;
+        case 25: // '2014-06-19T12:03:00+01:00'
+        case 29: // '2014-06-19T12:03:00.000+01:00'
+            strncpy(parsedStr, inputStr, kISO8601TimestampLength);
+            hasTimezone = YES;
+            break;
+        default: // Badly formatted timezone.
+            strncpy(parsedStr, inputStr, (length > 24 ? 24 : length));
+            break;
+    }
+    
+    // Append timezone
+    size_t timestampLength = strlen(parsedStr);
+    if (hasTimezone) {
+        // Append the timezone without the `:`
+        
+        // Copy first three characters of the timezone, i.e if we had +01:00, it will take +01
+        strncpy(parsedStr + timestampLength, inputStr + length - kISO8601TimezoneLength, 3);
+        
+        // Copy the last two characters of the timezone, i.e if we had +01:00, it will take 00
+        strncpy(parsedStr + timestampLength + 3, inputStr + length - 2, 2);
+    }
+    else
+    {
+        // If we don't have a user defined timestamp, use the standard (GMT +0)
+        strncpy(parsedStr + timestampLength, kISO8601DefaultTimestamp, strlen(kISO8601DefaultTimestamp));
+    }
+    
+    // Append null terminator
+    parsedStr[sizeof(parsedStr) - 1] = 0;
+    
+    // Create time from string
+    struct tm timeStruct;
+    
+    char *strpResult = strptime(parsedStr, kISO8601FormatString, &timeStruct);
+    if (strpResult == NULL) {
+        return nil;
+    }
+    
+    time_t time;
+    time = mktime(&timeStruct);
+    
+    return [NSDate dateWithTimeIntervalSince1970:time];
+}
+
 # pragma mark -
 # pragma mark Private Methods
 # pragma mark -
