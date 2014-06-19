@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "DANAdditions"
-  s.version      = "1.0.0"
+  s.version      = "1.1.0"
   s.summary      = "DANAdditions is a set of categories for various classes in Objective-C."
   s.homepage     = "https://github.com/DanielTomlinson/DANAdditions"
   s.license      = 'MIT'
