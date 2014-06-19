@@ -8,7 +8,7 @@ Pod::Spec.new do |s|
   
   s.platform     = :ios
   
-  s.source       = { :git => "https://github.com/endocrimes/DANAdditions.git", :tag => "1.0.0" }
+  s.source       = { :git => "https://github.com/endocrimes/DANAdditions.git", :tag => "1.1.0" }
 
   s.source_files = '*.{h,m}'
 
