@@ -81,4 +81,17 @@ typedef NS_ENUM(NSInteger, day) {
 
 - (BOOL)isLaterThan:(NSDate*)otherDate;
 
+/**
+ *  | Supported Formats |
+ * - 2014-06-19T12:03:00Z
+ * - 2014-06-19T12:03:00.000Z
+ * - 2014-06-19T12:03:00+01:00
+ * - 2014-06-19T12:03:00.000+01:00
+ * 
+ * If the timezone is omitted or Z is used then
+ * a +00:00 timezone will be used.
+ *
+ */
++ (NSDate *)dateFromISO8601String:(NSString *)iso8601String;
+
 @end
