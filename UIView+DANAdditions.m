@@ -10,155 +10,129 @@
 
 #pragma mark - Position
 
-- (CGSize)size
-{
+- (CGSize)size {
     return self.frame.size;
 }
 
-- (void)setSize:(CGSize)size
-{
+- (void)setSize:(CGSize)size {
     CGRect frame = self.frame;
     frame.size = size;
     self.frame = frame;
 }
 
-- (CGPoint)origin
-{
+- (CGPoint)origin {
     return self.frame.origin;
 }
 
-- (void)setOrigin:(CGPoint)origin
-{
+- (void)setOrigin:(CGPoint)origin {
     CGRect frame = self.frame;
     frame.origin = origin;
     self.frame = frame;
 }
 
-- (CGFloat)top
-{
+- (CGFloat)top {
     return self.origin.y;
 }
 
-- (void)setTop:(CGFloat)top
-{
+- (void)setTop:(CGFloat)top {
     CGRect frame = self.frame;
     frame.origin.y = top;
     self.frame = frame;
 }
 
-- (CGFloat)left
-{
+- (CGFloat)left {
     return self.origin.x;
 }
 
-- (void)setLeft:(CGFloat)left
-{
+- (void)setLeft:(CGFloat)left {
     CGRect frame = self.frame;
     frame.origin.x = left;
     self.frame = frame;
 }
 
-- (CGFloat)right
-{
+- (CGFloat)right {
     return self.left + self.width;
 }
 
-- (void)setRight:(CGFloat)right
-{
+- (void)setRight:(CGFloat)right {
     CGRect frame = self.frame;
     frame.origin.x = right - frame.size.width;
     self.frame = frame;
 }
 
-- (CGFloat)bottom
-{
+- (CGFloat)bottom {
     return self.top + self.height;
 }
 
-- (void)setBottom:(CGFloat)bottom
-{
+- (void)setBottom:(CGFloat)bottom {
     CGRect frame = self.frame;
     frame.origin.y = bottom - frame.size.height;
     self.frame = frame;
 }
 
-- (CGFloat)width
-{
+- (CGFloat)width {
     return self.size.width;
 }
 
-- (void)setWidth:(CGFloat)width
-{
+- (void)setWidth:(CGFloat)width {
     CGRect frame = self.frame;
     frame.size.width = width;
     self.frame = frame;
 }
 
-- (CGFloat)height
-{
+- (CGFloat)height {
     return self.size.height;
 }
 
-- (void)setHeight:(CGFloat)height
-{
+- (void)setHeight:(CGFloat)height {
     CGRect frame = self.frame;
     frame.size.height = height;
     self.frame = frame;
 }
 
-- (CGFloat)x
-{
+- (CGFloat)x {
     return self.center.x;
 }
 
-- (void)setX:(CGFloat)x
-{
+- (void)setX:(CGFloat)x {
     self.center = CGPointMake(x, self.y);
 }
 
-- (CGFloat)y
-{
+- (CGFloat)y {
     return self.center.y;
 }
 
-- (void)setY:(CGFloat)y
-{
+- (void)setY:(CGFloat)y {
     self.center = CGPointMake(self.x, y);
 }
 
 #pragma mark - Bounds
 
-- (CGSize)boundsSize
-{
+- (CGSize)boundsSize {
     return self.bounds.size;
 }
 
-- (void)setBoundsSize:(CGSize)size
-{
+- (void)setBoundsSize:(CGSize)size {
     CGRect bounds = self.bounds;
     bounds.size = size;
     self.bounds = bounds;
 }
 
-- (CGFloat)boundsWidth
-{
+- (CGFloat)boundsWidth {
     return self.boundsSize.width;
 }
 
-- (void)setBoundsWidth:(CGFloat)width
-{
+- (void)setBoundsWidth:(CGFloat)width {
     CGRect bounds = self.bounds;
     bounds.size.width = width;
     self.bounds = bounds;
 }
 
-- (CGFloat)boundsHeight
-{
+- (CGFloat)boundsHeight {
     return self.boundsSize.height;
 }
 
-- (void)setBoundsHeight:(CGFloat)height
-{
+- (void)setBoundsHeight:(CGFloat)height {
     CGRect bounds = self.bounds;
     bounds.size.height = height;
     self.bounds = bounds;
@@ -168,8 +142,7 @@
 
 
 // With thanks to Nick Lockwood ( https://github.com/nicklockwood/ViewUtils )
-- (void)crossfadeWithDuration:(NSTimeInterval)duration
-{
+- (void)crossfadeWithDuration:(NSTimeInterval)duration {
     //jump through a few hoops to avoid QuartzCore framework dependency
     CAAnimation *animation = [NSClassFromString(@"CATransition") animation];
     [animation setValue:@"kCATransitionFade" forKey:@"type"];
@@ -177,18 +150,15 @@
     [self.layer addAnimation:animation forKey:nil];
 }
 
-- (void)crossfadeWithDuration:(NSTimeInterval)duration completion:(void (^)(void))completion
-{
+- (void)crossfadeWithDuration:(NSTimeInterval)duration completion:(void (^)(void))completion {
     [self crossfadeWithDuration:duration];
-    if (completion)
-    {
+    if (completion) {
         dispatch_time_t time = dispatch_time(DISPATCH_TIME_NOW, duration * NSEC_PER_SEC);
         dispatch_after(time, dispatch_get_main_queue(), completion);
     }
 }
 
-- (UIImage *)renderAsImage
-{
+- (UIImage *)renderAsImage {
     UIGraphicsBeginImageContextWithOptions(self.bounds.size, self.opaque, 0.0);
     [self.layer renderInContext:UIGraphicsGetCurrentContext()];
 
