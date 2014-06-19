@@ -157,7 +157,7 @@
     }
 }
 
-#prama mark - Image Rendering
+#pragma mark - Image Rendering
 
 - (UIImage *)renderAsImage {
     UIGraphicsBeginImageContextWithOptions(self.bounds.size, self.opaque, 0.0);
