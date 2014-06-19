@@ -6,6 +6,12 @@
 
 #import "NSDate+DANAdditions.h"
 
+const NSInteger kISO8601MaxLength = 25;
+const NSInteger kISO8601TimestampLength = 19;
+const NSInteger kISO8601TimezoneLength = 6;
+const char * kISO8601DefaultTimestamp = "+0000";
+const char * kISO8601FormatString = "%FT%T%z";
+
 @implementation NSDate (DANAdditions)
 
 # pragma mark Public Methods
