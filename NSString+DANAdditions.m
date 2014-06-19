@@ -29,27 +29,22 @@ static const short _base64DecodingTable[256] = {
 
 @implementation NSString (DANAdditions)
 
-- (NSURL *)url
-{
+- (NSURL *)url {
     return [NSURL URLWithString:self];
 }
 
-+ (NSString *)localCachePath
-{
++ (NSString *)localCachePath {
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
     return [NSString stringWithFormat:@"%@/",[paths objectAtIndex:0]];
 }
 
-+ (NSString *)localDocsPath
-{
++ (NSString *)localDocsPath {
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     return [NSString stringWithFormat:@"%@/",[paths objectAtIndex:0]];
 }
 
-- (NSString *)urlFriendlyFileNameWithExtension:(NSString *)extension prefixID:(int)prefixID
-{
-    if (self.length == 0)
-    {
+- (NSString *)urlFriendlyFileNameWithExtension:(NSString *)extension prefixID:(int)prefixID {
+    if (self.length == 0) {
         return @"";
     }
     
@@ -68,59 +63,51 @@ static const short _base64DecodingTable[256] = {
     NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"__+" options:NSRegularExpressionCaseInsensitive error:nil];
     cleanTitle = [regex stringByReplacingMatchesInString:cleanTitle options:0 range:NSMakeRange(0, [cleanTitle length]) withTemplate:@"_"];
     
-    if ([[cleanTitle substringWithRange:NSMakeRange([cleanTitle length]-1, 1)] isEqualToString:@"_"])
-    {
+    if ([[cleanTitle substringWithRange:NSMakeRange([cleanTitle length]-1, 1)] isEqualToString:@"_"]) {
         cleanTitle = [cleanTitle substringWithRange:NSMakeRange(0, [cleanTitle length]-1)];
     }
     
-    if (!prefixID)
-    {
+    if (!prefixID) {
         return [cleanTitle stringByAppendingPathExtension:extension];
     }
     
     return [[[NSString stringWithFormat:@"%i-%@",prefixID, cleanTitle] lowercaseString] stringByAppendingPathExtension:extension];
 }
 
-- (NSString *)urlFriendlyFileName
-{
+- (NSString *)urlFriendlyFileName {
     NSString *fileExtension = [self pathExtension];
     
     return [[self stringByReplacingOccurrencesOfString:fileExtension withString:@""] urlFriendlyFileNameWithExtension:fileExtension prefixID:0];
 }
 
-- (NSString *)stringByAppendingURLPathComponent:(NSString *)pathComponent
-{
+- (NSString *)stringByAppendingURLPathComponent:(NSString *)pathComponent {
     NSString *protocol = ([self hasPrefix:@"https://"]) ? @"https://" : @"http://";
     NSString *cleanedStr = [self stringByReplacingOccurrencesOfString:protocol withString:@""];
     
     return [NSString stringWithFormat:@"%@%@",protocol, [cleanedStr stringByAppendingPathComponent:pathComponent]];
 }
 
-- (NSString *)stringByDeletingLastURLPathComponent
-{
+- (NSString *)stringByDeletingLastURLPathComponent {
     NSString *protocol = ([self hasPrefix:@"https://"]) ? @"https://" : @"http://";
     NSString *cleanedStr = [self stringByReplacingOccurrencesOfString:protocol withString:@""];
     
     return [NSString stringWithFormat:@"%@%@",protocol, [cleanedStr stringByDeletingLastPathComponent]];
 }
 
-- (NSString *)sha512
-{
+- (NSString *)sha512 {
     const char *cstr = [self cStringUsingEncoding:NSUTF8StringEncoding];
     NSData *data = [NSData dataWithBytes:cstr length:self.length];
     uint8_t digest[CC_SHA256_DIGEST_LENGTH];
     CC_SHA256(data.bytes, (int)data.length, digest);
     NSMutableString* output = [NSMutableString stringWithCapacity:CC_SHA256_DIGEST_LENGTH * 2];
-    for(int i = 0; i < CC_SHA256_DIGEST_LENGTH; i++)
-    {
+    for(int i = 0; i < CC_SHA256_DIGEST_LENGTH; i++) {
         [output appendFormat:@"%02x", digest[i]];
     }
     
     return output;
 }
 
-- (NSString *)base64Encode
-{
+- (NSString *)base64Encode {
     NSData *objData = [self dataUsingEncoding:NSUTF8StringEncoding];
     const unsigned char * objRawData = [objData bytes];
     char * objPointer;
@@ -128,8 +115,7 @@ static const short _base64DecodingTable[256] = {
     
     // Get the Raw Data length and ensure we actually have data
     int intLength = (int)[objData length];
-    if (intLength == 0) 
-    {
+    if (intLength == 0)  {
         return nil;
     }
     
@@ -151,17 +137,14 @@ static const short _base64DecodingTable[256] = {
     }
     
     // now deal with the tail end of things
-    if (intLength != 0) 
-    {
+    if (intLength != 0)  {
         *objPointer++ = _base64EncodingTable[objRawData[0] >> 2];
-        if (intLength > 1) 
-        {
+        if (intLength > 1)  {
             *objPointer++ = _base64EncodingTable[((objRawData[0] & 0x03) << 4) + (objRawData[1] >> 4)];
             *objPointer++ = _base64EncodingTable[(objRawData[1] & 0x0f) << 2];
             *objPointer++ = '=';
         } 
-        else 
-        {
+        else  {
             *objPointer++ = _base64EncodingTable[(objRawData[0] & 0x03) << 4];
             *objPointer++ = '=';
             *objPointer++ = '=';
@@ -180,8 +163,7 @@ static const short _base64DecodingTable[256] = {
     return base64String;
 }
 
-- (NSString *)base64Decode 
-{
+- (NSString *)base64Decode  {
     const char *objPointer = [self cStringUsingEncoding:NSASCIIStringEncoding];
     size_t intLength = strlen(objPointer);
     int intCurrent;
@@ -190,12 +172,9 @@ static const short _base64DecodingTable[256] = {
     unsigned char *objResult = calloc(intLength, sizeof(unsigned char));
     
     // Run through the whole string, converting as we go
-    while ( ((intCurrent = *objPointer++) != '\0') && (intLength-- > 0) )
-    {
-        if (intCurrent == '=') 
-        {
-            if (*objPointer != '=' && ((i % 4) == 1))
-            {
+    while ( ((intCurrent = *objPointer++) != '\0') && (intLength-- > 0) ) {
+        if (intCurrent == '=')  {
+            if (*objPointer != '=' && ((i % 4) == 1)) {
                 // the padding character is invalid at this point -- so this entire string is invalid
                 free(objResult);
                 return nil;
@@ -204,20 +183,17 @@ static const short _base64DecodingTable[256] = {
         }
         
         intCurrent = _base64DecodingTable[intCurrent];
-        if (intCurrent == -1) 
-        {
+        if (intCurrent == -1)  {
             // we're at a whitespace -- simply skip over
             continue;
         } 
-        else if (intCurrent == -2) 
-        {
+        else if (intCurrent == -2)  {
             // we're at an invalid character
             free(objResult);
             return nil;
         }
         
-        switch (i % 4) 
-        {
+        switch (i % 4)  {
             case 0:
                 objResult[j] = intCurrent << 2;
                 break;
@@ -239,10 +215,8 @@ static const short _base64DecodingTable[256] = {
         i++;
     }
     k = j;
-    if (intCurrent == '=') 
-    {
-        switch (i % 4) 
-        {
+    if (intCurrent == '=')  {
+        switch (i % 4)  {
             case 1:
                 // Invalid state
                 free(objResult);
@@ -263,17 +237,14 @@ static const short _base64DecodingTable[256] = {
     return [[NSString alloc] initWithData:objData encoding:NSUTF8StringEncoding];
 }
 
-- (NSString*)stringBetweenString:(NSString *)start andString:(NSString *)end 
-{
+- (NSString*)stringBetweenString:(NSString *)start andString:(NSString *)end  {
     NSRange startRange = [self rangeOfString:start];
-    if (startRange.location != NSNotFound) 
-    {
+    if (startRange.location != NSNotFound)  {
         NSRange targetRange;
         targetRange.location = startRange.location + startRange.length;
         targetRange.length = [self length] - targetRange.location;
         NSRange endRange = [self rangeOfString:end options:0 range:targetRange];
-        if (endRange.location != NSNotFound)
-        {
+        if (endRange.location != NSNotFound) {
             targetRange.length = endRange.location - targetRange.location;
             return [self substringWithRange:targetRange];
         }
@@ -282,90 +253,72 @@ static const short _base64DecodingTable[256] = {
     return nil;
 }
 
-- (NSString *)stringByStrippingHTML 
-{
+- (NSString *)stringByStrippingHTML  {
     NSRange r;
     NSString *s = [self copy];
-    while ((r = [s rangeOfString:@"<[^>]+>" options:NSRegularExpressionSearch]).location != NSNotFound)
-    {
+    while ((r = [s rangeOfString:@"<[^>]+>" options:NSRegularExpressionSearch]).location != NSNotFound) {
         s = [s stringByReplacingCharactersInRange:r withString:@""];
     }
     
     return s;
 }
 
-- (NSString *)trim 
-{
+- (NSString *)trim  {
     return [self stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 }
 
-- (BOOL)isNumeric 
-{
+- (BOOL)isNumeric  {
     NSScanner* scan = [NSScanner scannerWithString:self];
     int val;
     
     return [scan scanInt:&val] && [scan isAtEnd];
 }
 
-- (BOOL)containsString:(NSString *)needle 
-{
+- (BOOL)containsString:(NSString *)needle  {
     if (!self.length) return NO;
     
     return ([self rangeOfString:needle].location == NSNotFound) ? NO : YES;
 }
 
 __attribute__((overloadable))
-NSString *substr(NSString *str, int start) 
-{
+NSString *substr(NSString *str, int start)  {
     return substr(str, start, 0);
 }
 
 __attribute__((overloadable))
-NSString *substr(NSString *str, int start, int length) 
-{
+NSString *substr(NSString *str, int start, int length)  {
     NSInteger str_len = str.length;
-    if (!str_len) 
-    {
+    if (!str_len)  {
         return @"";
     }
-    if (str_len < length) 
-    {
+    if (str_len < length)  {
         return str;
     }
-    if (start < 0 && length == 0)
-    {
+    if (start < 0 && length == 0) {
         return [str substringFromIndex:str_len+start];
     }
-    if (start == 0 && length > 0)
-    {
+    if (start == 0 && length > 0) {
         return [str substringToIndex:length];
     }
-    if (start < 0 && length > 0)
-    {
+    if (start < 0 && length > 0) {
         return [[str substringFromIndex:str_len+start] substringToIndex:length];
     }
-    if (start > 0 && length > 0)
-    {
+    if (start > 0 && length > 0) {
         return [[str substringFromIndex:start] substringToIndex:length];
     }
-    if (start > 0 && length == 0)
-    {
+    if (start > 0 && length == 0) {
         return [str substringFromIndex:start];
     }
-    if (length < 0)
-    {
+    if (length < 0) {
         NSString *tmp_str;
-        if (start < 0)
-        {
+        if (start < 0) {
             tmp_str = [str substringFromIndex:str_len+start];
         }
-        else
-        {
+        else {
             tmp_str = [str substringFromIndex:start];
         }
         NSInteger tmp_str_len = tmp_str.length;
-        if (tmp_str_len + length <= 0) 
-        {
+        if (tmp_str_len + length <= 0)  {
             return @"";
         }
         
@@ -379,8 +332,7 @@ NSString *substr(NSString *str, int start, int length)
 
 @implementation NSObject (isEmpty)
 
-- (BOOL)mag_isEmpty 
-{
+- (BOOL)mag_isEmpty  {
     return self == nil || ([self respondsToSelector:@selector(length)] && [(NSData *)self length] == 0) || ([self respondsToSelector:@selector(count)] && [(NSArray *)self count] == 0);
 }
 @end

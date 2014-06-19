@@ -8,8 +8,7 @@
 
 @implementation UIColor (DANAdditions)
 
-+(UIColor *)colorFromHexString:(NSString *)hexString 
-{
++(UIColor *)colorFromHexString:(NSString *)hexString  {
     unsigned rgbValue = 0;
     hexString = [hexString stringByReplacingOccurrencesOfString:@"#" withString:@""];
     NSScanner *scanner = [NSScanner scannerWithString:hexString];
@@ -19,8 +18,7 @@
     return [UIColor colorWithRed:((rgbValue & 0xFF0000) >> 16)/255.0 green:((rgbValue & 0xFF00) >> 8)/255.0 blue:(rgbValue & 0xFF)/255.0 alpha:1.0];
 }
 
-- (UIColor *)lighten:(CGFloat)amount
-{
+- (UIColor *)lighten:(CGFloat)amount {
     CGFloat h, s, b, a;
     if ([self getHue:&h saturation:&s brightness:&b alpha:&a])
         return [UIColor colorWithHue:h
@@ -30,8 +28,7 @@
     return nil;
 }
 
-- (UIColor *)darken:(CGFloat)amount
-{
+- (UIColor *)darken:(CGFloat)amount {
     CGFloat h, s, b, a;
     if ([self getHue:&h saturation:&s brightness:&b alpha:&a])
         return [UIColor colorWithHue:h
@@ -41,8 +38,7 @@
     return nil;
 }
 
-- (UIColor *)saturate:(CGFloat)amount 
-{
+- (UIColor *)saturate:(CGFloat)amount  {
     CGFloat h, s, b, a;
     if ([self getHue:&h saturation:&s brightness:&b alpha:&a])
         return [UIColor colorWithHue:h
@@ -52,8 +48,7 @@
     return nil;
 }
 
-- (UIColor *)desaturate:(CGFloat)amount 
-{
+- (UIColor *)desaturate:(CGFloat)amount  {
     CGFloat h, s, b, a;
     if ([self getHue:&h saturation:&s brightness:&b alpha:&a])
         return [UIColor colorWithHue:h
@@ -63,8 +58,7 @@
     return nil;
 }
 
-- (UIColor *)invert 
-{
+- (UIColor *)invert  {
     CGFloat r, g, b, a;
     if ([self getRed:&r green:&g blue:&b alpha:&a])
         return [UIColor colorWithRed:1.0-r
@@ -74,8 +68,7 @@
     return nil;
 }
 
-- (UIColor *)greyscale 
-{
+- (UIColor *)greyscale  {
     CGFloat r, g, b, a;
     if ([self getRed:&r green:&g blue:&b alpha:&a])
         return [UIColor colorWithWhite:((r + g + b) / 3)
@@ -83,8 +76,7 @@
     return nil;
 }
 
-- (UIColor*)colorBlendedOnColor:(UIColor*)blendColor
-{
+- (UIColor*)colorBlendedOnColor:(UIColor*)blendColor {
     UIColor *blendedColor = [self copy];
     
     UIGraphicsBeginImageContextWithOptions(CGSizeMake(1, 1), NO, 1);
@@ -96,8 +88,7 @@
     
     unsigned char* data = CGBitmapContextGetData (context);
     
-    if(data != NULL)
-    {
+    if(data != NULL) {
         int alpha = data[3];
         int red   = data[2];
         int green = data[1];
@@ -114,8 +105,7 @@
     return blendedColor;
 }
  
-- (UIColor*)colorWithMockAlphaOnWhite:(CGFloat)mockAlpha
-{
+- (UIColor*)colorWithMockAlphaOnWhite:(CGFloat)mockAlpha {
     return [self colorBlendedOnColor:[self colorWithAlphaComponent:mockAlpha]];
 }
 
