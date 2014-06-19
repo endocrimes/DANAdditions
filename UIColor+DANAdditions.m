@@ -8,7 +8,7 @@
 
 @implementation UIColor (DANAdditions)
 
-+(UIColor *)colorFromHexString:(NSString *)hexString  {
++(UIColor *)colorFromHexString:(NSString *)hexString {
     unsigned rgbValue = 0;
     hexString = [hexString stringByReplacingOccurrencesOfString:@"#" withString:@""];
     NSScanner *scanner = [NSScanner scannerWithString:hexString];
@@ -38,7 +38,7 @@
     return nil;
 }
 
-- (UIColor *)saturate:(CGFloat)amount  {
+- (UIColor *)saturate:(CGFloat)amount {
     CGFloat h, s, b, a;
     if ([self getHue:&h saturation:&s brightness:&b alpha:&a])
         return [UIColor colorWithHue:h
@@ -48,7 +48,7 @@
     return nil;
 }
 
-- (UIColor *)desaturate:(CGFloat)amount  {
+- (UIColor *)desaturate:(CGFloat)amount {
     CGFloat h, s, b, a;
     if ([self getHue:&h saturation:&s brightness:&b alpha:&a])
         return [UIColor colorWithHue:h
@@ -58,7 +58,7 @@
     return nil;
 }
 
-- (UIColor *)invert  {
+- (UIColor *)invert {
     CGFloat r, g, b, a;
     if ([self getRed:&r green:&g blue:&b alpha:&a])
         return [UIColor colorWithRed:1.0-r
@@ -68,7 +68,7 @@
     return nil;
 }
 
-- (UIColor *)greyscale  {
+- (UIColor *)greyscale {
     CGFloat r, g, b, a;
     if ([self getRed:&r green:&g blue:&b alpha:&a])
         return [UIColor colorWithWhite:((r + g + b) / 3)

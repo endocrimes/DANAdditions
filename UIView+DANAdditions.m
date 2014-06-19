@@ -140,7 +140,6 @@
 
 #pragma mark - Animation
 
-
 // With thanks to Nick Lockwood ( https://github.com/nicklockwood/ViewUtils )
 - (void)crossfadeWithDuration:(NSTimeInterval)duration {
     //jump through a few hoops to avoid QuartzCore framework dependency
@@ -157,6 +156,8 @@
         dispatch_after(time, dispatch_get_main_queue(), completion);
     }
 }
+
+#prama mark - Image Rendering
 
 - (UIImage *)renderAsImage {
     UIGraphicsBeginImageContextWithOptions(self.bounds.size, self.opaque, 0.0);
